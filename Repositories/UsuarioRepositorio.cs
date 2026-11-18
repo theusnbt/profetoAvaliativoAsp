@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MySql.Data.MySqlClient;
 using projetoAvaliativoCidade.Models;
+using System.Data;
 
 namespace projetoAvaliativoCidade.Repositories
 {
@@ -38,8 +39,34 @@ namespace projetoAvaliativoCidade.Repositories
             }
             catch (Exception ex) 
             {
-
+                throw new Exception($"Erro no MySql {ex.Message}");
             }
+        }
+
+        public async Task<UsuarioModel?> BuscarEmail(string email)
+        {
+            using var conexao = new MySqlConnection( _connectionString);
+
+            await conexao.OpenAsync();
+
+            var query = "SELECT id, nome, email, senhaHash FROM usuarios WHERE email = @Email";
+
+            using var comando = new MySqlCommand(query, conexao);
+
+            comando.Parameters.AddWithValue("@Email", email);
+
+            using var reader = await comando.ExecuteReaderAsync();
+            if(await reader.ReadAsync())
+            {
+                return new UsuarioModel()
+                {
+                    Id = Convert.ToInt32(reader["Id"]),
+                    Nome = reader.GetString("Nome"),
+                    Email = reader.GetString("Email"),
+                    SenhaHash = reader.GetString("SenhaHash")
+                };
+            }
+            return null;
         }
     }
 }

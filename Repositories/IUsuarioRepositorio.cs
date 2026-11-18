@@ -6,6 +6,6 @@ namespace projetoAvaliativoCidade.Repositories
     {
         Task<bool> Cadastrar(UsuarioModel usuario, string senhaPura);
 
-        Task<UsuarioModel> BuscarEmail(string email);
+        Task<UsuarioModel?> BuscarEmail(string email);
     }
 }
