@@ -1,6 +1,15 @@
-﻿namespace projetoAvaliativoCidade.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace projetoAvaliativoCidade.Models
 {
-    public class ContaModel
+    public class LoginModel
     {
+        [Required(ErrorMessage = "Informe o e-mail")]
+        [EmailAddress(ErrorMessage = "E-mail inválido")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Informe a senha")]
+        [DataType(DataType.Password)]
+        public string Senha { get; set; } = string.Empty;
     }
 }
