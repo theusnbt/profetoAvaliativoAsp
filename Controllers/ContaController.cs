@@ -91,5 +91,11 @@ namespace projetoAvaliativoCidade.Controllers
         { 
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction(nameof(Logout));
+        }
     }
 }
