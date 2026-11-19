@@ -85,6 +85,8 @@ namespace projetoAvaliativoCidade.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
             return RedirectToAction(nameof(Index));
         }
+        [Authorize]
+        [HttpGet]
         public IActionResult Index()
         { 
             return View();
