@@ -87,6 +87,39 @@ namespace projetoAvaliativoCidade.Controllers
         }
         [Authorize]
         [HttpGet]
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletarConta()
+        {
+            // Recupera o ID do usuário logado
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(usuarioId))
+            {
+                return Unauthorized();
+            }
+
+            // Exclui o usuário do banco de dados
+            var sucesso = await _usuarioRepositorio.Deletar(int.Parse(usuarioId));
+
+            if (!sucesso)
+            {
+                TempData["Erro"] = "Não foi possível excluir sua conta.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Encerra a sessão do usuário
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            TempData["sucesso"] = "Conta excluída com sucesso!";
+
+            return RedirectToAction(nameof(Login));
+        }
+
         public IActionResult Index()
         { 
             return View();
